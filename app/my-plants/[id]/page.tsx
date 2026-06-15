@@ -44,9 +44,7 @@ export default async function MyPlantDetailPage({ params }: MyPlantDetailProps) 
     .single();
 
   if (error || !myPlant) {
-  return (
-    <pre>{JSON.stringify({ id, userId: session.user.id, myPlant, error }, null, 2)}</pre>
-  );
+  return notFound();
 }
 
   return (

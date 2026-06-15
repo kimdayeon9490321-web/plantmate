@@ -5,10 +5,13 @@ import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 
 interface PlantPageProps {
-  params: any;
+  params: Promise<{
+    id: string;
+  }>;
 }
 
 export default async function PlantDetailPage({ params }: PlantPageProps) {
+  const { id } = await params;
   const cookieStore = await cookies();
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -41,7 +44,7 @@ export default async function PlantDetailPage({ params }: PlantPageProps) {
     const { data: userPlant } = await supabase
       .from('user_plants')
       .select('id')
-      .eq('plant_id', params.id)
+      .eq('plant_id', id)
       .eq('user_id', session.user.id)
       .maybeSingle();
 
@@ -50,19 +53,15 @@ export default async function PlantDetailPage({ params }: PlantPageProps) {
 
  if (plantError || !plant) {
   return (
-    <pre style={{ padding: '20px', whiteSpace: 'pre-wrap' }}>
-      {JSON.stringify(
-        {
-          params,
-          plant,
-          plantError,
-          supabaseUrlExists: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
-          supabaseKeyExists: !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-        },
-        null,
-        2
-      )}
-    </pre>
+    <Shell>
+      <div className="rounded-3xl border border-rose-200 bg-rose-50 p-8 text-rose-700 shadow-sm">
+        <h1 className="text-2xl font-semibold">식물을 찾을 수 없습니다.</h1>
+        <p className="mt-2">등록된 식물 데이터가 없거나 요청이 잘못되었습니다.</p>
+        <Link href="/plants" className="mt-6 inline-block rounded-full bg-brand-600 px-5 py-3 text-sm font-semibold text-white hover:bg-brand-700">
+          식물 목록으로 돌아가기
+        </Link>
+      </div>
+    </Shell>
   );
 }
 

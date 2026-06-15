@@ -52,6 +52,8 @@ export default async function PlantDetailPage({ params }: PlantPageProps) {
   }
 
  if (plantError || !plant) {
+  return <h1>DEBUG TEST 12345</h1>;
+}
   return (
     <Shell>
       <div className="rounded-3xl border border-rose-200 bg-rose-50 p-8 text-rose-700 shadow-sm">

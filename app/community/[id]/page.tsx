@@ -47,9 +47,7 @@ export default async function CommunityPostPage({ params }: CommunityPostPagePro
   const comments = commentsResponse.data ?? [];
 
   if (postError || !post) {
-   return (
-    <pre>{JSON.stringify({ id, post, postError, commentsError: commentsResponse.error }, null, 2)}</pre>
-   );
+    return notFound();
   }
 
   return (

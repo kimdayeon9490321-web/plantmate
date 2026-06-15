@@ -5,10 +5,14 @@ import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 
 interface CommunityPostPageProps {
-  params: any;
+  params: Promise<{
+    id: string;
+  }>;
 }
 
 export default async function CommunityPostPage({ params }: CommunityPostPageProps) {
+  const { id } = await params;
+
   const cookieStore = await cookies();
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -29,12 +33,12 @@ export default async function CommunityPostPage({ params }: CommunityPostPagePro
     supabase
       .from('posts')
       .select('id, title, content, image_url, created_at, user_id, profiles(display_name), plants(name)')
-      .eq('id', params.id)
+      .eq('id', id)
       .single(),
     supabase
       .from('comments')
       .select('id, content, created_at, user_id, profiles(display_name)')
-      .eq('post_id', params.id)
+      .eq('post_id', id)
       .order('created_at', { ascending: true })
   ]);
 
@@ -42,9 +46,21 @@ export default async function CommunityPostPage({ params }: CommunityPostPagePro
   const postError = postResponse.error;
   const comments = commentsResponse.data ?? [];
 
-  if (postError || !post) {
-    notFound();
-  }
+ if (postError || !post) {
+  return (
+    <pre>
+      {JSON.stringify(
+        {
+          id,
+          post,
+          postError,
+        },
+        null,
+        2
+      )}
+    </pre>
+  );
+}
 
   return (
     <Shell>

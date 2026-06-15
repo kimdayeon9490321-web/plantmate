@@ -32,7 +32,7 @@ export default async function PlantDetailPage({ params }: PlantPageProps) {
     supabase
       .from('plants')
       .select('id, name, category, summary, description')
-      .eq('id', params.id)
+      .eq('id', id)
       .single(),
     supabase.auth.getSession()
   ]);

@@ -3,7 +3,8 @@ import CommunityPostDetail from '@/components/CommunityPostDetail';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
-
+export default async function CommunityPostPage({ params }: CommunityPostPageProps) {
+  return <h1>COMMUNITY DEBUG 999</h1>;
 interface CommunityPostPageProps {
   params: Promise<{
     id: string;

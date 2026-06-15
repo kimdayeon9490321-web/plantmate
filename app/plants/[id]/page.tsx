@@ -51,21 +51,19 @@ export default async function PlantDetailPage({ params }: PlantPageProps) {
     isRegistered = Boolean(userPlant?.id);
   }
 
- if (plantError || !plant) {
-  return <h1>DEBUG TEST 12345</h1>;
-}
-  return (
-    <Shell>
-      <div className="rounded-3xl border border-rose-200 bg-rose-50 p-8 text-rose-700 shadow-sm">
-        <h1 className="text-2xl font-semibold">식물을 찾을 수 없습니다.</h1>
-        <p className="mt-2">등록된 식물 데이터가 없거나 요청이 잘못되었습니다.</p>
-        <Link href="/plants" className="mt-6 inline-block rounded-full bg-brand-600 px-5 py-3 text-sm font-semibold text-white hover:bg-brand-700">
-          식물 목록으로 돌아가기
-        </Link>
-      </div>
-    </Shell>
-  );
-}
+  if (plantError || !plant) {
+    return (
+      <Shell>
+        <div className="rounded-3xl border border-rose-200 bg-rose-50 p-8 text-rose-700 shadow-sm">
+          <h1 className="text-2xl font-semibold">식물을 찾을 수 없습니다.</h1>
+          <p className="mt-2">등록된 식물 데이터가 없거나 요청이 잘못되었습니다.</p>
+          <Link href="/plants" className="mt-6 inline-block rounded-full bg-brand-600 px-5 py-3 text-sm font-semibold text-white hover:bg-brand-700">
+            식물 목록으로 돌아가기
+          </Link>
+        </div>
+      </Shell>
+    );
+  }
 
   return (
     <Shell>

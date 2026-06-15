@@ -5,10 +5,14 @@ import { cookies } from 'next/headers';
 import { redirect, notFound } from 'next/navigation';
 
 interface MyPlantDetailProps {
-  params: any;
+  params: Promise<{
+    id: string;
+  }>;
 }
 
 export default async function MyPlantDetailPage({ params }: MyPlantDetailProps) {
+  const { id } = await params;
+
   const cookieStore = await cookies();
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -35,13 +39,15 @@ export default async function MyPlantDetailPage({ params }: MyPlantDetailProps) 
   const { data: myPlant, error } = await supabase
     .from('user_plants')
     .select('id, nickname, created_at, plants(id, name)')
-    .eq('id', params.id)
+    .eq('id', id)
     .eq('user_id', session.user.id)
     .single();
 
   if (error || !myPlant) {
-    return notFound();
-  }
+  return (
+    <pre>{JSON.stringify({ id, userId: session.user.id, myPlant, error }, null, 2)}</pre>
+  );
+}
 
   return (
     <Shell>
